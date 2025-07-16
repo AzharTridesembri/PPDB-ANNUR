@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -126,6 +127,62 @@ class AdminController extends Controller
     {
         // Kode export PDF akan ditambahkan nanti
         return redirect()->back()->with('info', 'Fitur export PDF akan segera tersedia');
+    }
+
+    /**
+     * Menghapus data calon siswa
+     */
+    public function deleteCalonSiswa($id)
+    {
+        $calonSiswa = CalonSiswa::findOrFail($id);
+
+        // Hapus file dokumen jika ada
+        if ($calonSiswa->dokumen_kk) {
+            Storage::delete('public/dokumen/' . $calonSiswa->dokumen_kk);
+        }
+
+        if ($calonSiswa->dokumen_rapor) {
+            Storage::delete('public/dokumen/' . $calonSiswa->dokumen_rapor);
+        }
+
+        $calonSiswa->delete();
+
+        return redirect()->route('admin.calon-siswa.index')
+            ->with('success', 'Data calon siswa berhasil dihapus');
+    }
+
+    /**
+     * Menghapus banyak data calon siswa sekaligus
+     */
+    public function bulkDeleteCalonSiswa(Request $request)
+    {
+        $request->validate([
+            'selected_ids' => 'required|array',
+            'selected_ids.*' => 'exists:calon_siswas,id_siswa',
+        ]);
+
+        $count = 0;
+
+        foreach ($request->selected_ids as $id) {
+            $calonSiswa = CalonSiswa::find($id);
+
+            if ($calonSiswa) {
+                // Hapus file dokumen jika ada
+                if ($calonSiswa->dokumen_kk) {
+                    Storage::delete('public/dokumen/' . $calonSiswa->dokumen_kk);
+                }
+
+                if ($calonSiswa->dokumen_rapor) {
+                    Storage::delete('public/dokumen/' . $calonSiswa->dokumen_rapor);
+                }
+
+                $calonSiswa->delete();
+                $count++;
+            }
+        }
+
+        return redirect()->route('admin.calon-siswa.index')
+            ->with('success', $count . ' data calon siswa berhasil dihapus');
     }
 
     /**

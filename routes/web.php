@@ -32,6 +32,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/calon-siswa', [AdminController::class, 'calonSiswaIndex'])->name('calon-siswa.index');
         Route::get('/calon-siswa/{id}', [AdminController::class, 'calonSiswaShow'])->name('calon-siswa.show');
         Route::put('/calon-siswa/{id}/status', [AdminController::class, 'updateStatus'])->name('calon-siswa.update-status');
+        Route::delete('/calon-siswa/{id}', [AdminController::class, 'deleteCalonSiswa'])->name('calon-siswa.delete');
+        Route::delete('/calon-siswa', [AdminController::class, 'bulkDeleteCalonSiswa'])->name('calon-siswa.bulk-delete');
 
         // Route untuk export data
         Route::get('/export/excel', [AdminController::class, 'exportExcel'])->name('export.excel');
