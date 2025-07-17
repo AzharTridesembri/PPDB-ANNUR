@@ -18,14 +18,7 @@ class CalonSiswaSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         $jurusan = [
-            'Teknik Komputer dan Jaringan',
             'Rekayasa Perangkat Lunak',
-            'Multimedia',
-            'Teknik Elektronika Industri',
-            'Teknik Kendaraan Ringan',
-            'Teknik Sepeda Motor',
-            'Akuntansi',
-            'Administrasi Perkantoran',
             'Pemasaran'
         ];
 
@@ -55,10 +48,10 @@ class CalonSiswaSeeder extends Seeder
 
         $kota = ['Bandung', 'Cimahi', 'Garut', 'Tasikmalaya', 'Cianjur', 'Sumedang', 'Majalengka'];
 
-        // Generate 500 data calon siswa
-        echo "Membuat 500 data calon siswa...\n";
+        // Generate 125 data calon siswa
+        echo "Membuat 125 data calon siswa...\n";
 
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 125; $i++) {
             // Buat NISN unik dengan format yang benar (10 digit)
             $nisn = '00' . $faker->unique()->numerify('########');
 
@@ -97,10 +90,10 @@ class CalonSiswaSeeder extends Seeder
 
             // Tampilkan progress setiap 50 data
             if (($i + 1) % 50 === 0) {
-                echo "Membuat data ke-" . ($i + 1) . " dari 500\n";
+                echo "Membuat data ke-" . ($i + 1) . " dari 125\n";
             }
         }
 
-        echo "500 data calon siswa berhasil dibuat!\n";
+        echo "125 data calon siswa berhasil dibuat!\n";
     }
 }

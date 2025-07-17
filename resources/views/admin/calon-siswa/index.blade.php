@@ -70,10 +70,10 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold">Hasil Pencarian</h6>
                 <div>
-                    <a href="{{ route('admin.export.excel') }}" class="btn btn-sm btn-success">
+                    <a href="{{ route('admin.export.excel', ['status' => request('status'), 'search' => request('search')]) }}" class="btn btn-sm btn-success">
                         <i class="fas fa-file-excel me-1"></i>Export Excel
                     </a>
-                    <a href="{{ route('admin.export.pdf') }}" class="btn btn-sm btn-danger">
+                    <a href="{{ route('admin.export.pdf', ['status' => request('status'), 'search' => request('search')]) }}" class="btn btn-sm btn-danger">
                         <i class="fas fa-file-pdf me-1"></i>Export PDF
                     </a>
                 </div>

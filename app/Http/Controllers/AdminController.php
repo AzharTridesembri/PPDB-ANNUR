@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class AdminController extends Controller
 {
     /**
@@ -116,8 +118,11 @@ class AdminController extends Controller
      */
     public function exportExcel(Request $request)
     {
-        // Kode export Excel akan ditambahkan nanti
-        return redirect()->back()->with('info', 'Fitur export Excel akan segera tersedia');
+        $status = $request->status ?? null;
+        $search = $request->search ?? null;
+
+        $export = new \App\Exports\CalonSiswaExport($status, $search);
+        return $export->export();
     }
 
     /**
@@ -125,8 +130,32 @@ class AdminController extends Controller
      */
     public function exportPDF(Request $request)
     {
-        // Kode export PDF akan ditambahkan nanti
-        return redirect()->back()->with('info', 'Fitur export PDF akan segera tersedia');
+        $status = $request->status ?? null;
+        $search = $request->search ?? null;
+
+        $query = CalonSiswa::query();
+
+        // Filter berdasarkan status jika ada
+        if ($status && $status != 'semua') {
+            $query->where('status', $status);
+        }
+
+        // Filter berdasarkan pencarian jika ada
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nisn', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('no_hp', 'like', "%{$search}%");
+            });
+        }
+
+        $calonSiswas = $query->orderBy('created_at', 'desc')->get();
+
+        $pdf = Pdf::loadView('exports.calon-siswa-pdf', compact('calonSiswas', 'status', 'search'));
+        $pdf->setPaper('a4', 'landscape');
+
+        return $pdf->download('data_calon_siswa_' . date('Y-m-d_H-i-s') . '.pdf');
     }
 
     /**
