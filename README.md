@@ -105,7 +105,53 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-6. Konfigurasi database di file .env
+Pastikan juga untuk mengatur konfigurasi aplikasi lainnya di file .env:
+
+```
+APP_NAME="PPDB SMK ANNUR"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+```
+
+6. Konfigurasi database di file .env:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ppdb_smk_annur
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Sesuaikan nilai-nilai di atas dengan konfigurasi database Anda:
+
+-   `DB_CONNECTION`: Jenis database yang digunakan (mysql, pgsql, sqlite, dll)
+-   `DB_HOST`: Host database (biasanya localhost atau 127.0.0.1)
+-   `DB_PORT`: Port database (default MySQL: 3306)
+-   `DB_DATABASE`: Nama database yang akan digunakan
+-   `DB_USERNAME`: Username untuk akses database
+-   `DB_PASSWORD`: Password untuk akses database
+
+Jika aplikasi menggunakan fitur email, konfigurasikan juga pengaturan SMTP:
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-email-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your-email@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Untuk penyimpanan file, pastikan konfigurasi storage sudah benar:
+
+```
+FILESYSTEM_DISK=public
+```
 
 7. Jalankan migrasi database:
 
@@ -119,10 +165,17 @@ php artisan migrate
 php artisan storage:link
 ```
 
-9. Jalankan seeder (opsional):
+9. Jalankan seeder untuk membuat data awal (opsional):
 
 ```
 php artisan db:seed
+```
+
+Atau jalankan seeder tertentu:
+
+```
+php artisan db:seed --class=AdminSeeder       # Untuk membuat akun admin
+php artisan db:seed --class=CalonSiswaSeeder  # Untuk membuat data contoh calon siswa
 ```
 
 10. Jalankan server development:
